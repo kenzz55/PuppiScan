@@ -76,19 +76,26 @@
 
   <form action="/upload" method="post" enctype="multipart/form-data">
     <label for="breed">견종</label>
-    <input type="text" id="breed" name="breed" value="{{ breed or '' }}">
+    <select id="breed" name="breed">
+      <option value="">견종 선택</option>
+      <option value="푸들" {% if breed == "푸들" %}selected{% endif %}>푸들</option>
+      <option value="말티즈" {% if breed == "말티즈" %}selected{% endif %}>말티즈</option>
+      <option value="포메라니안" {% if breed == "포메라니안" %}selected{% endif %}>포메라니안</option>
+    </select>
 
     <label for="age">나이</label>
     <input type="text" id="age" name="age" value="{{ age or '' }}">
 
     <label for="gender">성별</label>
     <select id="gender" name="gender">
+      <option value="">성별 선택</option>
       <option value="수컷" {% if gender == "수컷" %}selected{% endif %}>수컷</option>
       <option value="암컷" {% if gender == "암컷" %}selected{% endif %}>암컷</option>
     </select>
 
     <label for="neutered">중성화 여부</label>
     <select id="neutered" name="neutered">
+      <option value="">중성화 여부 선택</option>
       <option value="예" {% if neutered == "예" %}selected{% endif %}>예</option>
       <option value="아니오" {% if neutered == "아니오" %}selected{% endif %}>아니오</option>
     </select>
