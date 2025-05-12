@@ -1,20 +1,21 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, flash
 import os
 import secrets
+from datetime import datetime
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-secret_key = secrets.token_hex(16)
+app.secret_key = secrets.token_hex(16)  # flash 메시지를 위해 설정
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/report', methods=['POST'])
-def make_report():
-    # 1. 텍스트 입력 받기
+@app.route('/upload', methods=['POST'])
+def upload_image():
+    # 입력값 받기
     breed = request.form.get('breed')
     age = request.form.get('age')
     gender = request.form.get('gender')
@@ -22,48 +23,63 @@ def make_report():
     neutered = request.form.get('neutered')
     environment = request.form.get('environment')
     condition = request.form.get('condition')
-    vulnerability = request.form.get('vulnerability')
-
-    # 2. 이미지 저장
+    vulnerability = request.form.get('special')  # special 필드 이름
     image = request.files.get('image')
-    if image:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-        image.save(filepath)
-    else:
-        return "이미지가 누락되었습니다", 400
+    filename = image.filename if image else request.form.get('saved_image')
 
-    # 3. AI 추론 결과 (mock)
-    # disease_name = diagnosis_puppy_skin(image)
-    # data = make_puppy_report(breed,age,gender,weight,neutered,enviroment,condition,vulnerability,disease_name)
+    # 유효성 검사
+    if not all([breed, age, gender, weight, neutered, environment, condition, vulnerability]):
+        flash("모든 항목을 입력해 주세요.")
+        return render_template('index.html', breed=breed, age=age, gender=gender, weight=weight,
+                               neutered=neutered, environment=environment,
+                               condition=condition, special=vulnerability)
+
+    if not image or image.filename == '':
+        flash("사진을 업로드해 주세요.")
+        return render_template('index.html', breed=breed, age=age, gender=gender, weight=weight,
+                               neutered=neutered, environment=environment,
+                               condition=condition, special=vulnerability)
+
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+    image.save(filepath)
+
+    # (모형 추론 결과)
     inferred_cause = "알레르기성 접촉성 피부염"
     disease = "농포성 여드름"
     tip = "실내 환경 청결 유지와 적절한 샴푸 사용을 권장합니다."
-    treatment_breed = "특정 견종의 유전적 요인 고려"
-    treatment_age = "어린 나이일수록 저자극 치료 권장"
-    treatment_gender = "성별 호르몬 영향 고려"
-    treatment_neutered = "호르몬 변화에 따른 치료 조정"
-    treatment_environment = "청결한 환경 유지"
-    treatment_condition = "기저 질환과 병행 치료 필요"
-    recommended_meds = "베타메타손 크림, 살리실산 샴푸"
-    cost1 = "30,000원"
-    cost2 = "20,000원"
-    cost3 = "10,000원"
-    confidence = "92%"
-    feature = "농포성 병변, 발적"
-    similarity = "유사 증례 87% 유사"
-    summary = "중소형견에서 자주 나타나는 접촉성 피부염의 전형적인 사례로 판단됨."
+    treatment = "항생제 연고 도포 및 수의사 진료 필요"
 
-    return render_template("report.html",
-        breed=breed, age=age, gender=gender, weight=weight, neutered=neutered,
-        environment=environment, condition=condition, vulnerability=vulnerability,
-        cause=inferred_cause, disease=disease, tip=tip,
-        treatment_breed=treatment_breed, treatment_age=treatment_age,
-        treatment_gender=treatment_gender, treatment_neutered=treatment_neutered,
-        treatment_environment=treatment_environment, treatment_condition=treatment_condition,
-        recommended_meds=recommended_meds,
-        cost1=cost1, cost2=cost2, cost3=cost3,
-        confidence=confidence, feature=feature, similarity=similarity, summary=summary
-    )
+    # 날짜 변수 추가
+    today = datetime.now().strftime("%Y-%m-%d")  # 형식: 2025-05-12
+
+    return render_template('report.html',
+                           breed=breed,
+                           age=age,
+                           gender=gender,
+                           weight=weight,
+                           neutered=neutered,
+                           environment=environment,
+                           condition=condition,
+                           vulnerability=vulnerability,
+                           cause=inferred_cause,
+                           disease=disease,
+                           tip=tip,
+                           treatment_breed=treatment,
+                           treatment_age=treatment,
+                           treatment_gender=treatment,
+                           treatment_neutered=treatment,
+                           treatment_environment=treatment,
+                           treatment_condition=treatment,
+                           recommended_meds="피부연고 A",
+                           cost1="15,000원",
+                           cost2="8,000원",
+                           cost3="10,000원",
+                           confidence="87%",
+                           feature="붉은 반점과 농포",
+                           similarity="92%",
+                           summary="농포성 여드름 가능성이 높으며 빠른 치료가 권장됩니다.",
+                           date_today=today  # ✅ 여기에 추가
+                           )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

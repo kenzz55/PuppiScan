@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='PuppiScan_logo_compressed.png') }}">
   <meta charset="UTF-8">
   <title>Puppi Scan</title>
   <style>
@@ -9,14 +10,8 @@
       max-width: 700px;
       margin: 2em auto;
     }
-    header {
-      text-align: center;
-      margin-bottom: 2em;
-    }
-    h1.page-title {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin: 0.5em 0;
+    h1 {
+      font-size: 2em;
     }
     label {
       display: block;
@@ -54,47 +49,78 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1 class="page-title">Puppi Scan</h1>
-    <p>반려견 피부 질환 판별을 위한 프로젝트</p>
-  </header>
-
-  <div class="preview">
-    <img src="{{ url_for('static', filename='PuppiScan_logo_compressed.png') }}" alt="로고 이미지">
+  <div style="text-align: center;">
+   <h1>Puppi Scan</h1>
+   <p>반려견 피부 질환 판별을 위한 프로젝트</p>
   </div>
 
-  <form action="/report" method="post" enctype="multipart/form-data">
+  <!-- 업로드 이미지 보여주기 -->
+  <div class="preview">
+    {% if saved_image_url %}
+      <img src="{{ saved_image_url }}" alt="미리보기 이미지">
+    {% else %}
+      <img src="{{ url_for('static', filename='PuppiScan_logo_compressed.png') }}" alt="로고 이미지">
+    {% endif %}
+  </div>
+
+  <!-- 숨겨진 필드로 이미지 이름/경로 유지 -->
+  <input type="hidden" name="saved_image" value="{{ saved_image or '' }}">
+  <input type="hidden" name="saved_image_url" value="{{ saved_image_url or '' }}">
+
+  <form action="/upload" method="post" enctype="multipart/form-data">
     <label for="breed">견종</label>
-    <input type="text" id="breed" name="breed">
+    <select id="breed" name="breed">
+      <option value="">견종 선택</option>
+      <option value="푸들" {% if breed == "푸들" %}selected{% endif %}>푸들</option>
+      <option value="말티즈" {% if breed == "말티즈" %}selected{% endif %}>말티즈</option>
+      <option value="포메라니안" {% if breed == "포메라니안" %}selected{% endif %}>포메라니안</option>
+    </select>
 
     <label for="age">나이</label>
-    <input type="text" id="age" name="age">
+    <input type="text" id="age" name="age" value="{{ age or '' }}">
 
     <label for="gender">성별</label>
     <select id="gender" name="gender">
-      <option value="수컷">수컷</option>
-      <option value="암컷">암컷</option>
+      <option value="">성별 선택</option>
+      <option value="수컷" {% if gender == "수컷" %}selected{% endif %}>수컷</option>
+      <option value="암컷" {% if gender == "암컷" %}selected{% endif %}>암컷</option>
     </select>
 
     <label for="neutered">중성화 여부</label>
     <select id="neutered" name="neutered">
-      <option value="예">예</option>
-      <option value="아니오">아니오</option>
+      <option value="">중성화 여부 선택</option>
+      <option value="예" {% if neutered == "예" %}selected{% endif %}>예</option>
+      <option value="아니오" {% if neutered == "아니오" %}selected{% endif %}>아니오</option>
     </select>
 
     <label for="environment">생활환경</label>
-    <input type="text" id="environment" name="environment">
+    <input type="text" id="environment" name="environment" value="{{ environment or '' }}">
 
     <label for="condition">기저질환</label>
-    <input type="text" id="condition" name="condition">
+    <input type="text" id="condition" name="condition" value="{{ condition or '' }}">
+
+    <label for="weight">체중</label>
+    <input type="text" id="weight" name="weight" value="{{ weight or '' }}">
 
     <label for="special">특이 취약 질병 여부</label>
-    <input type="text" id="special" name="special">
+    <input type="text" id="special" name="special" value="{{ special or '' }}">
 
     <label for="image">사진 업로드</label>
     <input type="file" name="image" id="image" accept="image/*">
 
     <button type="submit">사진 업로드 및 진단</button>
   </form>
+
+  <div style="text-align: center;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul style="color:red; font-weight:bold; list-style-type: none; padding-left: 0;">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
 </body>
 </html>

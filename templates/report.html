@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='PuppiScan_logo_compressed.png') }}">
   <meta charset="UTF-8">
   <title>진단서</title>
   <style>
@@ -56,6 +57,10 @@
   <header>
     <h1 class="page-title">진단서</h1>
   </header>
+
+  <p style="text-align: right; margin-top: 2em;">
+  발급일: {{ date_today }}
+  </p>
 
   <div class="page-body">
     <h3>✅ 입력 정보</h3>
