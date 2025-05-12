@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# VSCode or PyCharm specific
+.vscode/
+.idea/
+
+# macOS, Windows
+.DS_Store
+Thumbs.db
+
+# Flask/Uploads
+uploads/
+*.sqlite3
+
+# Environment variables
+.env
