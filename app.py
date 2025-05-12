@@ -21,25 +21,43 @@ def upload_image():
     gender = request.form.get('gender')
     weight = request.form.get('weight')
     neutered = request.form.get('neutered')
-    environment = request.form.get('environment')
     condition = request.form.get('condition')
-    vulnerability = request.form.get('special')  # special 필드 이름
+
+    plastic_dish = request.form.get('plastic_dish')
+    season = request.form.get('season')
+    bath_cycle = request.form.get('bath_cycle')
+    walk_habit = request.form.get('walk_habit')
+    sun_exposure = request.form.get('sun_exposure')
+    housing = request.form.get('housing')
+    toy_wash_cycle = request.form.get('toy_wash_cycle')
     image = request.files.get('image')
-    filename = image.filename if image else request.form.get('saved_image')
 
-    # 유효성 검사
-    if not all([breed, age, gender, weight, neutered, environment, condition, vulnerability]):
+    # 검증 목록에 새 필드 전부 추가!
+    if not all([
+        breed, age, gender, weight, neutered, condition,
+        plastic_dish, season, bath_cycle, walk_habit,
+        sun_exposure, housing, toy_wash_cycle
+    ]):
         flash("모든 항목을 입력해 주세요.")
-        return render_template('index.html', breed=breed, age=age, gender=gender, weight=weight,
-                               neutered=neutered, environment=environment,
-                               condition=condition, special=vulnerability)
-
+        return render_template('index.html',
+                               breed=breed, age=age, gender=gender, weight=weight,
+                               neutered=neutered, condition=condition,
+                               plastic_dish=plastic_dish, season=season,
+                               bath_cycle=bath_cycle, walk_habit=walk_habit,
+                               sun_exposure=sun_exposure, housing=housing,
+                               toy_wash_cycle=toy_wash_cycle
+                               )
+    # 이미지 유효성 검사
     if not image or image.filename == '':
         flash("사진을 업로드해 주세요.")
-        return render_template('index.html', breed=breed, age=age, gender=gender, weight=weight,
-                               neutered=neutered, environment=environment,
-                               condition=condition, special=vulnerability)
-
+        return render_template('index.html',
+                               breed=breed, age=age, gender=gender, weight=weight,
+                               neutered=neutered, condition=condition,
+                               plastic_dish=plastic_dish, season=season,
+                               bath_cycle=bath_cycle, walk_habit=walk_habit,
+                               sun_exposure=sun_exposure, housing=housing,
+                               toy_wash_cycle=toy_wash_cycle)
+    # 파일 저장 및 url 생성
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
     image.save(filepath)
 
@@ -58,9 +76,14 @@ def upload_image():
                            gender=gender,
                            weight=weight,
                            neutered=neutered,
-                           environment=environment,
+                           plastic_dish=plastic_dish,
+                           season=season,
+                           bath_cycle=bath_cycle,
+                           walk_habit=walk_habit,
+                           sun_exposure=sun_exposure,
+                           housing=housing,
+                           toy_wash_cycle=toy_wash_cycle,
                            condition=condition,
-                           vulnerability=vulnerability,
                            cause=inferred_cause,
                            disease=disease,
                            tip=tip,
