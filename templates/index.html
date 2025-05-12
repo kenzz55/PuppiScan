@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='PuppiScan_logo_compressed.png') }}">
   <meta charset="UTF-8">
   <title>Puppi Scan</title>
   <style>
@@ -48,18 +49,10 @@
   </style>
 </head>
 <body>
-  <h1>Puppi Scan</h1>
-  <p>반려견 피부 질환 판별을 위한 프로젝트</p>
-
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul style="color:red; font-weight:bold;">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+  <div style="text-align: center;">
+   <h1>Puppi Scan</h1>
+   <p>반려견 피부 질환 판별을 위한 프로젝트</p>
+  </div>
 
   <!-- 업로드 이미지 보여주기 -->
   <div class="preview">
@@ -117,5 +110,17 @@
 
     <button type="submit">사진 업로드 및 진단</button>
   </form>
+
+  <div style="text-align: center;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul style="color:red; font-weight:bold; list-style-type: none; padding-left: 0;">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
 </body>
 </html>
