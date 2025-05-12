@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, flash
 import os
 import secrets
 from datetime import datetime
+from gpt.summary import generate_summary
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -52,6 +53,13 @@ def upload_image():
     # 날짜 변수 추가
     today = datetime.now().strftime("%Y-%m-%d")  # 형식: 2025-05-12
 
+    # GPT 기반 summary 생성
+    summary = generate_summary(
+        breed, age, gender, weight, neutered,
+        environment, condition, vulnerability,
+        inferred_cause, disease, tip, treatment
+    )
+
     return render_template('report.html',
                            breed=breed,
                            age=age,
@@ -77,8 +85,8 @@ def upload_image():
                            confidence="87%",
                            feature="붉은 반점과 농포",
                            similarity="92%",
-                           summary="농포성 여드름 가능성이 높으며 빠른 치료가 권장됩니다.",
-                           date_today=today  # ✅ 여기에 추가
+                           summary=summary,
+                           date_today=today
                            )
 
 if __name__ == '__main__':
