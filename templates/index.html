@@ -167,11 +167,11 @@
     <label for="condition">기저질환</label>
     <select id="condition" name="condition">
       <option value="">기저질환 선택</option>
-      <option value="알레르기성 피부염" {% if condition=="알레르기성 피부염" %}selected{% endif %}>알레르기성 피부염</option>
-      <option value="면역 매개성 질환" {% if condition=="면역 매개성 질환"%}selected{% endif %}>면역 매개성 질환</option>
-      <option value="외부 기생충 알러지" {% if condition=="외부 기생충 알러지"%}selected{% endif %}>외부 기생충 알러지</option>
-      <option value="내분비 이상" {% if condition=="내분비 이상"%}selected{% endif %}>내분비 이상</option>
-      <option value="영양 불균형" {% if condition=="영양 불균형"%}selected{% endif %}>영양 불균형</option>
+      <option value="알레르기성 피부염" {% if condition== "알레르기성 피부염" %}selected{% endif %}>알레르기성 피부염</option>
+      <option value="피지 과다 분비" {% if condition== "피지 과다 분비"%}selected{% endif %}>피지 과다 분비</option>
+      <option value="내분비 이상" {% if condition== "내분비 이상"%}selected{% endif %}>내분비 이상</option>
+      <option value="영양 불균형" {% if condition== "영양 불균형"%}selected{% endif %}>영양 불균형</option>
+      <option value="없음" {% if condition== "없음"%}selected{% endif %}>없음</option>
     </select>
 
     <label for="weight">체중</label>
