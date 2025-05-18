@@ -3,6 +3,10 @@ import os, secrets, threading, uuid
 from datetime import datetime
 from gpt.summary import generate_summary  # 기존 GPT summary
 # 나중에 from ai.image_analysis import analyze_image 이런 식으로 붙이면 됨
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'yolov5'))
+from yolov5.run_detect import detect_disease
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -82,6 +86,8 @@ def process_request(sid, form, image_path):
     housing = form.get('housing')
     toy_wash_cycle = form.get('toy_wash_cycle')
     # result = run_image_analysis(image_path)  이후 확장
+    disease = detect_disease(image_path)
+    print(disease)
     # result = {
     #   "inferred_cause": "진드기 감염",
     #   "disease": "세균성 피부염",
