@@ -5,9 +5,9 @@ __pycache__/
 *.pyd
 
 # Virtual environment
-venv/
-env/
-.venv/
+#venv/
+#env/
+#.venv/
 
 # VSCode or PyCharm specific
 .vscode/
