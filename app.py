@@ -7,6 +7,11 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'yolov5'))
 from yolov5.run_detect import detect_disease
+from expert.petfact import *
+from expert.tip import *
+from expert.causemapping import *
+from expert.treatment import *
+
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -96,11 +101,46 @@ def process_request(sid, form, image_path):
     # }
     # 이미지 처리 로직 (향후 여기에 YOLO 등 붙이면 됨)
 
-    # 이후에 연결해야됨
-    inferred_cause = "알레르기성 접촉성 피부염"
-    disease = "농포성 여드름"
-    tip = "실내 환경 청결 유지와 적절한 샴푸 사용을 권장합니다."
-    treatment = "항생제 연고 도포 및 수의사 진료 필요"
+    external_fact = {
+        'breed': breed,
+        'gender': gender,
+        'neutered': neutered,
+        'uses_plastic_bowl': plastic_dish,
+        'season': season,
+        'bath_freq_per_month': bath_cycle,
+        'walk_habit': walk_habit,
+        'sun_exposure': sun_exposure,
+        'living_area': housing,
+        'wash_cycle': toy_wash_cycle,
+        'lesion_type': 'A1',
+        'underlying_conditions': condition,
+        'age_years': age,
+        'weight': weight
+    }
+
+    sample_fact = PetFact(
+        breed=breed,
+        age_years=age,
+        gender=gender,
+        neutered=neutered,
+        weight=weight,
+        lesion_type=disease,
+        underlying_conditions=condition,
+        uses_plastic_bowl=plastic_dish,
+        season=season,
+        bath_freq_per_month=bath_cycle,
+        walk_habit=walk_habit,
+        sun_exposure=sun_exposure,
+        living_area=housing,
+        wash_cycle=toy_wash_cycle
+    )
+
+    # 키워드 생성
+    user_env = fact_to_keywords(sample_fact)
+    secondary_disease = get_secondary_disease(disease, condition)  # 2차질병
+    inferred_cause, all_scores = infer_cause_for_disease(disease, user_env)  # 추론된 원인
+    tip = get_treatment_tip(disease, inferred_cause)
+    treatment = assert_fact('pet_recommendation', external_fact) # assert_fact를 사용하여 정적 fact로 전달
     summary = generate_summary(condition, inferred_cause, disease, tip, treatment)
 
     today = datetime.now().strftime("%Y-%m-%d")
