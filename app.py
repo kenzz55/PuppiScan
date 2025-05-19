@@ -15,7 +15,7 @@ from expert.treatment import *
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 

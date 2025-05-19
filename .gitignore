@@ -18,7 +18,7 @@ env/
 Thumbs.db
 
 # Flask/Uploads
-uploads/
+static/uploads/
 *.sqlite3
 
 # Environment variables
