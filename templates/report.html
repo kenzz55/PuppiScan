@@ -85,6 +85,16 @@
       </tbody>
     </table>
 
+    <h3>📷 AI 분석 결과 이미지</h3>
+    <div style="text-align: center; margin: 1em 0;">
+      {% if yolo_image %}
+        <img src="{{ yolo_image }}" alt="YOLO 분석 결과" style="max-width: 100%; border: 1px solid #ccc;">
+      {% else %}
+        <p>분석 이미지가 없습니다.</p>
+      {% endif %}
+    </div>
+
+
     <h3>🧠 추론된 원인 정보</h3>
     <p>{{ cause }}</p>
 

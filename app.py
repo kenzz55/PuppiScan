@@ -36,10 +36,37 @@ def start_upload():
         'sun_exposure', 'housing', 'toy_wash_cycle'
     ]
 
+    # 한글로 보여줄 항목 이름 매핑
+    field_names = {
+        'breed': '견종',
+        'age': '나이',
+        'gender': '성별',
+        'weight': '체중',
+        'neutered': '중성화 여부',
+        'condition': '기저질환',
+        'plastic_dish': '플라스틱 식기 사용 여부',
+        'season': '계절',
+        'bath_cycle': '목욕 주기',
+        'walk_habit': '산책 습관',
+        'sun_exposure': '햇빛 노출 정도',
+        'housing': '주거 환경',
+        'toy_wash_cycle': '애완용품 세탁 주기'
+    }
+
+    # 누락된 항목 필터링
     missing = [field for field in required_fields if not form_data.get(field)]
+
+    # 누락 항목 메시지 구성
     if missing or not image or image.filename == '':
-        flash("모든 항목을 입력하고 이미지를 업로드해 주세요.")
+        missing_fields = [field_names.get(f, f) for f in missing]
+
+        # 이미지 업로드 여부 확인
+        if not image or image.filename == '':
+            missing_fields.append('이미지 업로드')
+
+        flash(f"{', '.join(missing_fields)} 항목을 입력해주세요")
         return render_template('index.html', **form_data)
+
 
     image_path = None
     if image and image.filename != '':
@@ -105,6 +132,7 @@ def process_request(sid, form, image_path):
     summary = generate_summary(condition, inferred_cause, disease, tip, treatment)
 
     today = datetime.now().strftime("%Y-%m-%d")
+    yolo_image_url = '/static/result/result.jpg'
 
     result_store[sid] = {
         "status": "done",
@@ -139,7 +167,8 @@ def process_request(sid, form, image_path):
             "feature": "붉은 반점과 농포",
             "similarity": "92%",
             "summary": summary,
-            "date_today": today
+            "date_today": today,
+            "yolo_image": yolo_image_url
         }
     }
 
