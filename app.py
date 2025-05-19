@@ -86,7 +86,8 @@ def process_request(sid, form, image_path):
     housing = form.get('housing')
     toy_wash_cycle = form.get('toy_wash_cycle')
     # result = run_image_analysis(image_path)  이후 확장
-    disease = detect_disease(image_path)
+    disease, score = detect_disease(image_path)
+    print(score)
     print(disease)
     # result = {
     #   "inferred_cause": "진드기 감염",
