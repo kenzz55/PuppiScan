@@ -135,7 +135,7 @@ def process_request(sid, form, image_path):
             "cost1": "15,000원",
             "cost2": "8,000원",
             "cost3": "10,000원",
-            "confidence": "87%",
+            "confidence": f"{score:.2f}",
             "feature": "붉은 반점과 농포",
             "similarity": "92%",
             "summary": summary,
