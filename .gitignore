@@ -5,9 +5,9 @@ __pycache__/
 *.pyd
 
 # Virtual environment
-#venv/
-#env/
-#.venv/
+venv/
+env/
+.venv/
 
 # VSCode or PyCharm specific
 .vscode/
@@ -18,7 +18,7 @@ __pycache__/
 Thumbs.db
 
 # Flask/Uploads
-uploads/
+static/uploads/
 *.sqlite3
 
 # Environment variables
