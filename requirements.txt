@@ -1,3 +1,9 @@
+# flask, openai, python-dotenv
+
+flask
+openai
+python-dotenv
+
 # YOLOv5 requirements
 # Usage: pip install -r requirements.txt
 
