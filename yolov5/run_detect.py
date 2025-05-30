@@ -1,5 +1,5 @@
-import pathlib
-pathlib.PosixPath = pathlib.WindowsPath
+# import pathlib
+# pathlib.PosixPath = pathlib.WindowsPath
 
 import sys
 import torch
@@ -24,7 +24,7 @@ def detect_disease(image_path: str) -> tuple[str, float | None]:
 
     # 모델 경로
     base_dir = Path(__file__).resolve().parent
-    weights_path = base_dir / "best.pt"
+    weights_path = base_dir / "best_ec2.pt"
     save_path = base_dir.parent / "static" / "result" / "result.jpg"
 
     device = select_device('cpu')
