@@ -1,5 +1,5 @@
-# import pathlib
-# pathlib.PosixPath = pathlib.WindowsPath
+import pathlib
+pathlib.PosixPath = pathlib.WindowsPath
 
 import sys
 import torch
