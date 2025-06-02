@@ -112,8 +112,10 @@ def process_request(sid, form, image_path):
     sun_exposure = form.get('sun_exposure')
     housing = form.get('housing')
     toy_wash_cycle = form.get('toy_wash_cycle')
+    print("previous detect")
     # result = run_image_analysis(image_path)  이후 확장
     disease, score = detect_disease(image_path)
+    print("post detect")
     print(score)
     print(disease)
     # result = {
