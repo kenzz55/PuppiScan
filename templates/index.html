@@ -46,6 +46,7 @@
     .preview img {
       max-width: 300px;
     }
+
   </style>
 </head>
 <body>
@@ -67,7 +68,7 @@
   <input type="hidden" name="saved_image" value="{{ saved_image or '' }}">
   <input type="hidden" name="saved_image_url" value="{{ saved_image_url or '' }}">
 
-  <form action="/upload" method="post" enctype="multipart/form-data">
+  <form action="/start_upload" method="post" enctype="multipart/form-data">
     <label for="breed">견종</label>
     <select id="breed" name="breed">
       <option value="">견종 선택</option>
@@ -103,62 +104,62 @@
       <label for="plastic_dish">플라스틱 식기 사용 여부</label>
       <select id="plastic_dish" name="plastic_dish">
         <option value="">선택</option>
-        <option value="사용">사용</option>
-        <option value="사용X">사용X</option>
+        <option value="사용" {% if plastic_dish == "사용" %}selected{% endif %}>사용</option>
+        <option value="사용X" {% if plastic_dish == "사용X" %}selected{% endif %}>사용X</option>
       </select>
 
       <label for="season">계절</label>
       <select id="season" name="season">
         <option value="">선택</option>
-        <option value="spring">spring</option>
-        <option value="summer">summer</option>
-        <option value="fall">fall</option>
-        <option value="winter">winter</option>
+        <option value="spring" {% if season == "spring" %}selected{% endif %}>spring</option>
+        <option value="summer" {% if season == "summer" %}selected{% endif %}>summer</option>
+        <option value="fall" {% if season == "fall" %}selected{% endif %}>fall</option>
+        <option value="winter" {% if season == "winter" %}selected{% endif %}>winter</option>
       </select>
 
       <label for="bath_cycle">목욕 주기(달)</label>
       <select id="bath_cycle" name="bath_cycle">
         <option value="">선택</option>
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5이상">5이상</option>
+        <option value="0" {% if bath_cycle == "0" %}selected{% endif %}>0</option>
+        <option value="1" {% if bath_cycle == "1" %}selected{% endif %}>1</option>
+        <option value="2" {% if bath_cycle == "2" %}selected{% endif %}>2</option>
+        <option value="3" {% if bath_cycle == "3" %}selected{% endif %}>3</option>
+        <option value="4" {% if bath_cycle == "4" %}selected{% endif %}>4</option>
+        <option value="5이상" {% if bath_cycle == "5이상" %}selected{% endif %}>5이상</option>
       </select>
 
       <label for="walk_habit">산책 습관</label>
       <select id="walk_habit" name="walk_habit">
         <option value="">선택</option>
-        <option value="1">1: 냄새만 맡고 지나감</option>
-        <option value="2">2: 가끔 물체에 얼굴·몸을 가까이 함</option>
-        <option value="3">3: 주변에 몸을 비비거나 눕기도 함</option>
-        <option value="4">4: 풀밭·먼지에 얼굴·몸을 자주 파묻음</option>
+        <option value="1" {% if walk_habit == "1" %}selected{% endif %}>1: 냄새만 맡고 지나감</option>
+        <option value="2" {% if walk_habit == "2" %}selected{% endif %}>2: 가끔 물체에 얼굴·몸을 가까이 함</option>
+        <option value="3" {% if walk_habit == "3" %}selected{% endif %}>3: 주변에 몸을 비비거나 눕기도 함</option>
+        <option value="4" {% if walk_habit == "4" %}selected{% endif %}>4: 풀밭·먼지에 얼굴·몸을 자주 파묻음</option>
       </select>
 
       <label for="sun_exposure">햇빛 노출 정도</label>
       <select id="sun_exposure" name="sun_exposure">
         <option value="">선택</option>
-        <option value="1">1: 거의 없음</option>
-        <option value="2">2: 가끔 햇볕을 쬠</option>
-        <option value="3">3: 햇빛 아래 있는 시간이 꽤 있음</option>
-        <option value="4">4: 햇빛 아래 자주 머뭄</option>
+        <option value="1" {% if sun_exposure == "1" %}selected{% endif %}>1: 거의 없음</option>
+        <option value="2" {% if sun_exposure == "2" %}selected{% endif %}>2: 가끔 햇볕을 쬠</option>
+        <option value="3" {% if sun_exposure == "3" %}selected{% endif %}>3: 햇빛 아래 있는 시간이 꽤 있음</option>
+        <option value="4" {% if sun_exposure == "4" %}selected{% endif %}>4: 햇빛 아래 자주 머뭄</option>
       </select>
 
       <label for="housing">주거 환경</label>
       <select id="housing" name="housing">
         <option value="">선택</option>
-        <option value="indoor">indoor</option>
-        <option value="outdoor">outdoor</option>
+        <option value="indoor" {% if housing == "indoor" %}selected{% endif %}>indoor</option>
+        <option value="outdoor" {% if housing == "outdoor" %}selected{% endif %}>outdoor</option>
       </select>
 
       <label for="toy_wash_cycle">애완용품 세탁 주기</label>
       <select id="toy_wash_cycle" name="toy_wash_cycle">
         <option value="">선택</option>
-        <option value="1">1: 주 1회 이상 세탁</option>
-        <option value="2">2: 2주에 1회 정도 세탁</option>
-        <option value="3">3: 한 달에 1회 정도 세탁</option>
-        <option value="4">4: 거의 세탁하지 않음</option>
+        <option value="1" {% if toy_wash_cycle == "1" %}selected{% endif %}>1: 주 1회 이상 세탁</option>
+        <option value="2" {% if toy_wash_cycle == "2" %}selected{% endif %}>2: 2주에 1회 정도 세탁</option>
+        <option value="3" {% if toy_wash_cycle == "3" %}selected{% endif %}>3: 한 달에 1회 정도 세탁</option>
+        <option value="4" {% if toy_wash_cycle == "4" %}selected{% endif %}>4: 거의 세탁하지 않음</option>
       </select>
     </fieldset>
 
@@ -166,11 +167,11 @@
     <label for="condition">기저질환</label>
     <select id="condition" name="condition">
       <option value="">기저질환 선택</option>
-      <option value="알레르기성 피부염" {% if condition=="알레르기성 피부염" %}selected{% endif %}>알레르기성 피부염</option>
-      <option value="면역 매개성 질환" {% if condition=="면역 매개성 질환"%}selected{% endif %}>면역 매개성 질환</option>
-      <option value="외부 기생충 알러지" {% if condition=="외부 기생충 알러지"%}selected{% endif %}>외부 기생충 알러지</option>
-      <option value="내분비 이상" {% if condition=="내분비 이상"%}selected{% endif %}>내분비 이상</option>
-      <option value="영양 불균형" {% if condition=="영양 불균형"%}selected{% endif %}>영양 불균형</option>
+      <option value="알레르기성 피부염" {% if condition== "알레르기성 피부염" %}selected{% endif %}>알레르기성 피부염</option>
+      <option value="피지 과다 분비" {% if condition== "피지 과다 분비"%}selected{% endif %}>피지 과다 분비</option>
+      <option value="내분비 이상" {% if condition== "내분비 이상"%}selected{% endif %}>내분비 이상</option>
+      <option value="영양 불균형" {% if condition== "영양 불균형"%}selected{% endif %}>영양 불균형</option>
+      <option value="없음" {% if condition== "없음"%}selected{% endif %}>없음</option>
     </select>
 
     <label for="weight">체중</label>
@@ -201,5 +202,6 @@
       {% endif %}
     {% endwith %}
   </div>
+
 </body>
 </html>
