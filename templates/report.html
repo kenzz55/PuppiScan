@@ -94,48 +94,25 @@
       {% endif %}
     </div>
 
-
+    <h3>🦠 질병명</h3>
+    <p>{{ disease }}</p>   
     <h3>🧠 추론된 원인 정보</h3>
     <p>{{ cause }}</p>
 
     <h3>🧴 예방/관리 팁</h3>
     <p>{{ tip }}</p>
 
-    <h3>🩺 질병명 (2차 질병)</h3>
-    <p>{{ disease }}</p>
+    <h3>🩺 2차 질병</h3>
+    <p>{{ secondary_disease }}</p>
 
-    <h3>💊 치료 추천 사항</h3>
-    <table class="simple-table">
-      <thead>
-        <tr><th>항목</th><th>추천 치료</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>종 특이 질병</td><td>{{ treatment_breed }}</td></tr>
-        <tr><td>나이 기반</td><td>{{ treatment_age }}</td></tr>
-        <tr><td>성별 주의 사항</td><td>{{ treatment_gender }}</td></tr>
-        <tr><td>중성화 관련</td><td>{{ treatment_neutered }}</td></tr>
-        <tr><td>생활 환경</td><td>{{ treatment_environment }}</td></tr>
-        <tr><td>기저 질환</td><td>{{ treatment_condition }}</td></tr>
-        <tr><td>추천 약품</td><td>{{ recommended_meds }}</td></tr>
-      </tbody>
-    </table>
-
-    <h3>💰 예상 치료비</h3>
-    <ul>
-      <li>1차 진료 + 피부 검사: {{ cost1 }}</li>
-      <li>보습제 및 외용약: {{ cost2 }}</li>
-      <li>재진 및 경과 관찰: {{ cost3 }}</li>
-    </ul>
+    <h3>💊 추천 치료 및 💰 예상 비용</h3>
+    <pre style="background-color: #f8f8f8; border-left: 5px solid #ccc; padding: 1em; white-space: pre-wrap; border-radius: 6px; font-family: sans-serif;">
+    {{ treatment }}
+    </pre>
 
     <h3>📊 AI 분석 신뢰도</h3>
     <ul>
       <li>Confidence Score: {{ confidence }}</li>
-      <li>분석 근거:
-        <ul>
-          <li>이미지 특징: {{ feature }}</li>
-          <li>유사 케이스 매칭률: {{ similarity }}</li>
-        </ul>
-      </li>
     </ul>
 
     <h2>📌 요약</h2>

@@ -8,9 +8,31 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'yolov5'))
 from yolov5.run_detect import detect_disease
 
+from expert.tip import *
+from expert.causemapping import *
+from expert.treatment import *
+
+from dataclasses import dataclass
+@dataclass()
+class PetFact:
+    breed: str
+    age_years: int
+    gender: str
+    neutered: str
+    weight: int
+    lesion_type: str
+    underlying_conditions: str
+    uses_plastic_bowl: str
+    season: str
+    bath_freq_per_month: int
+    walk_habit: int
+    sun_exposure: int
+    living_area: str
+    wash_cycle: int
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -67,7 +89,6 @@ def start_upload():
         flash(f"{', '.join(missing_fields)} 항목을 입력해주세요")
         return render_template('index.html', **form_data)
 
-
     image_path = None
     if image and image.filename != '':
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
@@ -112,30 +133,78 @@ def process_request(sid, form, image_path):
     sun_exposure = form.get('sun_exposure')
     housing = form.get('housing')
     toy_wash_cycle = form.get('toy_wash_cycle')
-    print("previous detect")
     # result = run_image_analysis(image_path)  이후 확장
+    
     disease, score = detect_disease(image_path)
-    print("post detect")
     print(score)
     print(disease)
-    # result = {
-    #   "inferred_cause": "진드기 감염",
-    #   "disease": "세균성 피부염",
-    #   "tip": "진드기 예방제를 사용하고 자주 목욕시켜 주세요",
-    #   "treatment": "항생제 처방 필요"
-    # }
-    # 이미지 처리 로직 (향후 여기에 YOLO 등 붙이면 됨)
+    
+    disease_map = {
+    "dermatitis": "A4",
+    "flea_allergy": "A1",
+    "ringworm": "A5",
+    "scabies": "A2"
+    }
+    disease_name = disease
+    disease = disease_map.get(disease, disease)    
+    
+    disease_map2 = {
+    "dermatitis": "피부염",
+    "flea_allergy": "벼룩 알레르기 피부염",
+    "ringworm": "피부사상균증",
+    "scabies": "옴진드기 감염"
+    }
+    disease_name = disease_map2.get(disease_name, disease_name)
+        
+    external_fact = {
+        'breed': breed,
+        'gender': gender,
+        'neutered': neutered,
+        'uses_plastic_bowl': plastic_dish,
+        'season': season,
+        'bath_freq_per_month': bath_cycle,
+        'walk_habit': walk_habit,
+        'sun_exposure': sun_exposure,
+        'living_area': housing,
+        'wash_cycle': toy_wash_cycle,
+        'lesion_type': disease,
+        'underlying_conditions': condition,
+        'age_years': age,
+        'weight': weight
+    }
 
-    # 이후에 연결해야됨
-    inferred_cause = "알레르기성 접촉성 피부염"
-    disease = "농포성 여드름"
-    tip = "실내 환경 청결 유지와 적절한 샴푸 사용을 권장합니다."
-    treatment = "항생제 연고 도포 및 수의사 진료 필요"
+    sample_fact = PetFact(
+        breed=breed,
+        age_years=age,
+        gender=gender,
+        neutered=neutered,
+        weight=weight,
+        lesion_type=disease,
+        underlying_conditions=condition,
+        uses_plastic_bowl=plastic_dish,
+        season=season,
+        bath_freq_per_month=bath_cycle,
+        walk_habit=walk_habit,
+        sun_exposure=sun_exposure,
+        living_area=housing,
+        wash_cycle=toy_wash_cycle
+    )
+    
+    print(external_fact)
+
+    user_env = fact_to_keywords(sample_fact)
+    secondary_disease = get_secondary_disease(disease, condition)  # 2차질병
+    inferred_cause, all_scores = infer_cause_for_disease(disease, user_env)  # 추론된 원인
+    tip = get_treatment_tip(disease, inferred_cause)
+    treatment = get_recommendation(external_fact) # assert_fact를 사용하여 정적 fact로 전달
+    
+    print(treatment)
+    
     summary = generate_summary(condition, inferred_cause, disease, tip, treatment)
+
 
     today = datetime.now().strftime("%Y-%m-%d")
     yolo_image_url = '/static/result/result.jpg'
-
     result_store[sid] = {
         "status": "done",
         "data": {
@@ -153,21 +222,13 @@ def process_request(sid, form, image_path):
             "toy_wash_cycle": toy_wash_cycle,
             "condition": condition,
             "cause": inferred_cause,
-            "disease": disease,
+            "disease": disease_name,
+            "secondary_disease" : secondary_disease,
             "tip": tip,
-            "treatment_breed": treatment,
-            "treatment_age": treatment,
-            "treatment_gender": treatment,
-            "treatment_neutered": treatment,
-            "treatment_environment": treatment,
-            "treatment_condition": treatment,
-            "recommended_meds": "피부연고 A",
-            "cost1": "15,000원",
-            "cost2": "8,000원",
-            "cost3": "10,000원",
+            "treatment": treatment,
             "confidence": f"{score:.2f}",
-            "feature": "붉은 반점과 농포",
-            "similarity": "92%",
+            #"feature": "붉은 반점과 농포",
+            #"similarity": "92%",
             "summary": summary,
             "date_today": today,
             "yolo_image": yolo_image_url
