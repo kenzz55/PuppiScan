@@ -1,6 +1,9 @@
 
 # 🐶 Puppi Scan
 
+![Image](https://github.com/user-attachments/assets/7811e00d-470a-4321-a0e3-ab3417b185f6)
+
+
 ## 팀원
 백엔드 : 이호근
 
